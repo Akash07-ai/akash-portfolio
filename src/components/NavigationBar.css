@@ -1,0 +1,41 @@
+.nav-bar {
+  height: var(--nav-bar-height);
+  width: 100%;
+  background-color: var(--surface-color);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid var(--surface-color-light);
+  z-index: 100;
+  position: relative;
+  /* Ensure it stays at bottom if layout changes, but flex column handles it */
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 10px;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  transition: color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  /* For ripple if added */
+}
+
+.nav-item.active {
+  color: var(--primary-color);
+}
+
+.nav-item svg {
+  transition: transform 0.2s ease;
+}
+
+.nav-item:active svg {
+  transform: scale(0.9);
+}

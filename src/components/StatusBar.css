@@ -1,0 +1,63 @@
+.status-bar {
+  height: 32px;
+  /* Slightly taller for better visibility */
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  background-color: transparent;
+  /* Transparent to blend with background */
+  z-index: 1000;
+  user-select: none;
+  position: absolute;
+  /* Fixed at top */
+  top: 0;
+  left: 0;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-time {
+  font-weight: 600;
+}
+
+.status-name {
+  font-weight: 400;
+  opacity: 0.8;
+  font-size: 11px;
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-date {
+  margin-right: 4px;
+  opacity: 0.8;
+  font-size: 11px;
+}
+
+.status-icon {
+  opacity: 0.9;
+}
+
+.battery-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.battery-text {
+  font-size: 10px;
+  font-weight: 600;
+}

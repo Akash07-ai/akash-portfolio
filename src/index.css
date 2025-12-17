@@ -1,0 +1,82 @@
+:root {
+  --bg-color: #121212;
+  --surface-color: #1E1E1E;
+  --surface-color-light: #2C2C2C;
+  --primary-color: #3DDC84; /* Android Green */
+  --primary-variant: #37BE75;
+  --accent-color: #03DAC6;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B0B0B0;
+  --error-color: #CF6679;
+  --status-bar-height: 24px;
+  --nav-bar-height: 56px;
+  --border-radius: 16px;
+  --font-family: 'Roboto', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: #000; /* distinct from phone bg to show the frame on desktop */
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Scrollbar styling for webkit */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-color-light);
+  border-radius: 2px;
+}
+
+/* Utility Classes */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+
+/* Ripple Effect (Simple CSS version, JS can enhance) */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+.ripple::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform .5s, opacity 1s;
+}
+.ripple:active::after {
+  transform: scale(0, 0);
+  opacity: 0.2;
+  transition: 0s;
+}
