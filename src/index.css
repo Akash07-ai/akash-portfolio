@@ -1,7 +1,8 @@
 :root {
   --bg-color: #121212;
-  --surface-color: #1E1E1E;
-  --surface-color-light: #2C2C2C;
+  --surface-color: rgba(255, 255, 255, 0.05);
+  --surface-color-light: rgba(255, 255, 255, 0.1);
+  --surface-strong: rgba(18, 18, 18, 0.78);
   --primary-color: #3DDC84; /* Android Green */
   --primary-variant: #37BE75;
   --accent-color: #03DAC6;
@@ -12,6 +13,9 @@
   --nav-bar-height: 56px;
   --border-radius: 16px;
   --font-family: 'Roboto', 'Inter', system-ui, -apple-system, sans-serif;
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --green-glow: 0 0 20px rgba(61, 220, 132, 0.2);
+  --cyan-glow: 0 0 22px rgba(3, 218, 198, 0.18);
 }
 
 * {
@@ -22,7 +26,10 @@
 }
 
 body {
-  background-color: #000; /* distinct from phone bg to show the frame on desktop */
+  background:
+    radial-gradient(circle at 18% 20%, rgba(61, 220, 132, 0.16), transparent 26%),
+    radial-gradient(circle at 80% 78%, rgba(3, 218, 198, 0.14), transparent 28%),
+    #020403;
   color: var(--text-primary);
   font-family: var(--font-family);
   display: flex;
@@ -30,6 +37,17 @@ body {
   align-items: center;
   min-height: 100vh;
   overflow: hidden;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Scrollbar styling for webkit */
@@ -79,4 +97,73 @@ body {
   transform: scale(0, 0);
   opacity: 0.2;
   transition: 0s;
+}
+
+.app-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: 32px;
+  min-height: 0;
+}
+
+.system-notification {
+  position: absolute;
+  top: 40px;
+  left: 14px;
+  right: 14px;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  background: rgba(15, 18, 17, 0.78);
+  box-shadow: var(--green-glow), 0 16px 32px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(20px);
+}
+
+.system-notification strong {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+}
+
+.system-notification p {
+  color: var(--text-secondary);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.notification-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--primary-color);
+  box-shadow: 0 0 16px rgba(61, 220, 132, 0.8);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+  flex: 0 0 auto;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(0.82); opacity: 0.68; }
+  50% { transform: scale(1); opacity: 1; }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  body::after {
+    content: 'Rotate to portrait mode';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: #050807;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+  }
 }

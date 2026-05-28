@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { Wifi, Battery, Signal } from 'lucide-react';
 import './StatusBar.css';
 
@@ -37,17 +38,29 @@ const StatusBar = () => {
   return (
     <div className="status-bar">
       <div className="status-left">
-        <span className="status-time">{formatTime(time)}</span>
+        <AnimatePresence mode="wait">
+          <Motion.span
+            key={formatTime(time)}
+            className="status-time"
+            initial={{ opacity: 0, y: 3 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -3 }}
+            transition={{ duration: 0.18 }}
+          >
+            {formatTime(time)}
+          </Motion.span>
+        </AnimatePresence>
         <span className="status-name">Akash</span>
       </div>
 
       <div className="status-right">
         <span className="status-date">{formatDate(time)}</span>
-        <Signal size={14} className="status-icon" />
+        <Signal size={14} className="status-icon signal-icon" />
         <Wifi size={14} className="status-icon" />
-        <div className="battery-container">
+        <div className="battery-container charging">
           <span className="battery-text">{batteryLevel}%</span>
           <Battery size={14} className="status-icon" />
+          <span className="battery-pulse" />
         </div>
       </div>
     </div>

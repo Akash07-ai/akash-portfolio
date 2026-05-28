@@ -1,40 +1,32 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { Smartphone } from 'lucide-react';
+import './Screens.css';
 
 const SplashScreen = () => {
   return (
-    <motion.div
+    <Motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#121212',
-        color: '#3DDC84'
-      }}
+      className="splash-os"
     >
-      <motion.div
+      <Motion.div
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
         <Smartphone size={64} />
-      </motion.div>
-      <motion.h1
+      </Motion.div>
+      <Motion.h1
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        style={{ marginTop: 20, fontSize: 24, color: '#fff', fontFamily: 'sans-serif' }}
+        className="splash-title"
       >
-        My Portfolio
-      </motion.h1>
-    </motion.div>
+        Portfolio OS
+      </Motion.h1>
+    </Motion.div>
   );
 };
 

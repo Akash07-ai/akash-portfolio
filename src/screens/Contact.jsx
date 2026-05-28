@@ -1,35 +1,44 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion as Motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { Mail, Phone, Linkedin, Github, Send } from 'lucide-react';
+import emailjs from '@emailjs/browser';
+import './Screens.css';
 
-const ContactItem = ({ icon: Icon, label, value, href }) => (
-  <a href={href} target="_blank" rel="noopener noreferrer" style={{
-    display: 'flex',
-    alignItems: 'center',
-    gap: 16,
-    background: 'var(--surface-color-light)',
-    padding: 16,
-    borderRadius: 16,
-    marginBottom: 12,
-    textDecoration: 'none',
-    color: 'inherit'
-  }}>
-    <div style={{
-      width: 40, height: 40, borderRadius: '50%',
-      backgroundColor: '#333', display: 'flex', justifyContent: 'center', alignItems: 'center'
-    }}>
-      <Icon size={20} color="var(--primary-color)" />
+const EMAILJS_SERVICE_ID = 'service_84d8dw7';
+const EMAILJS_TEMPLATE_ID = 'template_upo533c';
+const EMAILJS_PUBLIC_KEY = 'UslqLPQjmuOYPJSB1';
+
+const ContactItem = ({ icon, label, value, href }) => (
+  <Motion.a
+    href={href}
+    target={href.startsWith('http') ? '_blank' : undefined}
+    rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+    className="contact-card glass-card ripple"
+    whileHover={{ x: 4, scale: 1.01 }}
+    whileTap={{ scale: 0.98 }}
+  >
+    <div className="contact-icon">
+      {React.createElement(icon, { size: 20 })}
     </div>
     <div>
-      <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{label}</p>
-      <p style={{ fontSize: 14, fontWeight: '500' }}>{value}</p>
+      <p>{label}</p>
+      <p>{value}</p>
     </div>
-  </a>
+  </Motion.a>
 );
 
 const Contact = () => {
   const location = useLocation();
+  const form = useRef();
+  const [isSending, setIsSending] = useState(false);
+  const [notification, setNotification] = useState(null);
+
+  useEffect(() => {
+    emailjs.init({
+      publicKey: EMAILJS_PUBLIC_KEY,
+    });
+  }, []);
 
   useEffect(() => {
     if (location.hash) {
@@ -41,96 +50,134 @@ const Contact = () => {
     }
   }, [location]);
 
+  const showNotification = (type, message) => {
+    setNotification({ type, message });
+    window.setTimeout(() => setNotification(null), 3600);
+  };
+
+  const sendEmail = (event) => {
+    event.preventDefault();
+
+    if (isSending) return;
+    setIsSending(true);
+
+    emailjs.sendForm(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID,
+      form.current,
+      {
+        publicKey: EMAILJS_PUBLIC_KEY,
+      }
+    )
+      .then(() => {
+        showNotification('success', 'Message Sent Successfully');
+        form.current.reset();
+      })
+      .catch((error) => {
+        console.error('EmailJS send failed:', error);
+        showNotification('error', 'Failed to Send Message');
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
+  };
+
   return (
-    <motion.div
+    <Motion.div
       initial={{ x: '100%', opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: '-100%', opacity: 0 }}
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      style={{
-        padding: 20,
-        height: '100%',
-        overflowY: 'auto',
-        paddingBottom: 80,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 24,
-        background: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('https://www.sdgyoungleaders.org/wp-content/uploads/2020/04/load-image-67.jpeg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
-      }}
+      className="screen scroll-screen"
     >
-      {/* Contact Info Section */}
-      <div id="info" style={{ scrollMarginTop: 80 }}>
-        <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16 }}>Contact Info</h2>
-        <ContactItem
-          icon={Mail}
-          label="Email"
-          value="akashvaggannavar9906@gmail.com"
-          href="mailto:akashvaggannavar9906@gmail.com"
-        />
-        <ContactItem
-          icon={Phone}
-          label="Phone"
-          value="6364739906"
-          href="tel:6364739906"
-        />
-        <ContactItem
-          icon={Linkedin}
-          label="LinkedIn"
-          value="Akash Vaggannavar"
-          href="https://www.linkedin.com/in/akash-vaggannavar-651193261/"
-        />
-        <ContactItem
-          icon={Github}
-          label="GitHub"
-          value="Akash07-ai"
-          href="https://github.com/Akash07-ai"
-        />
-      </div>
+      <AnimatePresence>
+        {notification && (
+          <Motion.div
+            className={`contact-toast ${notification.type}`}
+            initial={{ opacity: 0, y: -16, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -12, scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+          >
+            <span className="contact-toast-dot" />
+            <strong>{notification.message}</strong>
+          </Motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Message Form Section */}
-      <div id="message" style={{ scrollMarginTop: 80 }}>
-        <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16 }}>Send Message</h2>
-        <form style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Motion.section id="info" className="screen-section" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
+        <h2 className="section-title">Contact Info</h2>
+        <div className="contact-list">
+          <ContactItem
+            icon={Mail}
+            label="Name"
+            value="Akash Vaggannavar"
+            href="mailto:akashvaggannavar9906@gmail.com"
+          />
+          <ContactItem
+            icon={Mail}
+            label="Email"
+            value="akashvaggannavar9906@gmail.com"
+            href="mailto:akashvaggannavar9906@gmail.com"
+          />
+          <ContactItem
+            icon={Phone}
+            label="Phone"
+            value="6364739906"
+            href="tel:6364739906"
+          />
+          <ContactItem
+            icon={Linkedin}
+            label="LinkedIn"
+            value="Akash Vaggannavar"
+            href="https://www.linkedin.com/in/akash-vaggannavar-651193261/"
+          />
+          <ContactItem
+            icon={Github}
+            label="GitHub"
+            value="Akash07-ai"
+            href="https://github.com/Akash07-ai"
+          />
+        </div>
+      </Motion.section>
+
+      <Motion.section id="message" className="screen-section" initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <h2 className="section-title">Send Message</h2>
+        <form ref={form} onSubmit={sendEmail} className="message-form glass-card" style={{ padding: 16 }}>
+          <input type="hidden" name="to_email" value="akashvaggannavar9906@gmail.com" />
           <input
+            className="field"
             type="text"
+            name="from_name"
             placeholder="Your Name"
-            style={{
-              padding: 16, borderRadius: 12, border: 'none',
-              backgroundColor: 'var(--surface-color-light)', color: '#fff', outline: 'none', fontSize: 14
-            }}
+            required
           />
           <input
+            className="field"
             type="email"
+            name="from_email"
             placeholder="Your Email"
-            style={{
-              padding: 16, borderRadius: 12, border: 'none',
-              backgroundColor: 'var(--surface-color-light)', color: '#fff', outline: 'none', fontSize: 14
-            }}
+            required
           />
           <textarea
+            className="field"
+            name="message"
             placeholder="Message"
             rows={5}
-            style={{
-              padding: 16, borderRadius: 12, border: 'none',
-              backgroundColor: 'var(--surface-color-light)', color: '#fff', outline: 'none', resize: 'none', fontSize: 14, fontFamily: 'inherit'
-            }}
+            required
           />
-          <button
-            type="button"
-            style={{
-              padding: 16, borderRadius: 12, border: 'none',
-              backgroundColor: 'var(--primary-color)', color: '#000', fontWeight: 'bold', fontSize: 16,
-              display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, cursor: 'pointer'
-            }}
+          <Motion.button
+            type="submit"
+            className={`send-button ripple ${isSending ? 'sending' : ''}`}
+            whileHover={!isSending ? { scale: 1.02 } : undefined}
+            whileTap={!isSending ? { scale: 0.96 } : undefined}
+            disabled={isSending}
           >
-            Send <Send size={18} />
-          </button>
+            {isSending ? 'Sending...' : 'Send'} <Send size={18} />
+          </Motion.button>
         </form>
-      </div>
-    </motion.div>
+      </Motion.section>
+    </Motion.div>
   );
 };
 

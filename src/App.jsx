@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion as Motion } from 'framer-motion';
 import PhoneFrame from './components/PhoneFrame';
 import StatusBar from './components/StatusBar';
 import NavigationBar from './components/NavigationBar';
@@ -12,7 +12,7 @@ import SplashScreen from './screens/SplashScreen';
 const AppContent = () => {
   const location = useLocation();
   return (
-    <div style={{ flex: 1, overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column', paddingTop: 32 }}>
+    <main className="app-content">
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
@@ -20,15 +20,24 @@ const AppContent = () => {
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </AnimatePresence>
-    </div>
+    </main>
   );
 };
 
 const App = () => {
   const [loading, setLoading] = useState(true);
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 2000);
+    const loadingTimer = setTimeout(() => setLoading(false), 2000);
+    const notificationTimer = setTimeout(() => setShowNotification(true), 3200);
+    const hideTimer = setTimeout(() => setShowNotification(false), 7600);
+
+    return () => {
+      clearTimeout(loadingTimer);
+      clearTimeout(notificationTimer);
+      clearTimeout(hideTimer);
+    };
   }, []);
 
   return (
@@ -39,6 +48,23 @@ const App = () => {
         ) : (
           <>
             <StatusBar />
+            <AnimatePresence>
+              {showNotification && (
+                <Motion.div
+                  className="system-notification"
+                  initial={{ y: -28, opacity: 0, scale: 0.96 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  exit={{ y: -20, opacity: 0, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+                >
+                  <span className="notification-dot" />
+                  <div>
+                    <strong>Portfolio OS</strong>
+                    <p>Someone visited your portfolio</p>
+                  </div>
+                </Motion.div>
+              )}
+            </AnimatePresence>
             <AppContent />
             <NavigationBar />
           </>
