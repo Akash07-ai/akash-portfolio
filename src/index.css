@@ -32,9 +32,7 @@ body {
     #020403;
   color: var(--text-primary);
   font-family: var(--font-family);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
   min-height: 100dvh;
   overflow-x: hidden;
 }
