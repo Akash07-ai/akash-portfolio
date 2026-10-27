@@ -1,6 +1,7 @@
 .status-bar {
   height: 32px;
   width: calc(100% - 16px);
+  max-width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -47,6 +48,7 @@
   margin-right: 4px;
   opacity: 0.8;
   font-size: 11px;
+  white-space: nowrap;
 }
 
 .status-icon {
@@ -83,6 +85,15 @@
 @keyframes charge-pulse {
   0%, 100% { opacity: 0.15; transform: scale(0.9); }
   50% { opacity: 0.8; transform: scale(1.08); }
+}
+
+@media (max-width: 374px) {
+  .status-date {
+    display: none;
+  }
+  .status-name {
+    display: none;
+  }
 }
 
 @keyframes signal-blink {

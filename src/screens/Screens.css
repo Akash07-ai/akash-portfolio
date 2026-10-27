@@ -101,6 +101,7 @@
   font-size: 11px;
   font-weight: 800;
   text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  max-width: 72px;
 }
 
 .story-ring {
@@ -128,8 +129,8 @@
 .clock-widget {
   position: relative;
   z-index: 5;
-  margin-top: 96px;
-  margin-bottom: 46px;
+  margin-top: clamp(48px, 10vh, 96px);
+  margin-bottom: clamp(20px, 5vh, 46px);
   text-align: center;
   padding: 18px 28px;
   border-radius: 28px;
@@ -140,7 +141,7 @@
 }
 
 .clock-widget h1 {
-  font-size: 62px;
+  font-size: clamp(44px, 12vw, 62px);
   line-height: 0.95;
   font-weight: 200;
   color: #fff;
@@ -161,11 +162,11 @@
   max-width: 318px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px 18px;
+  gap: clamp(12px, 4vw, 24px) clamp(8px, 3vw, 18px);
 }
 
 .launcher-icon {
-  width: 86px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -178,8 +179,8 @@
 }
 
 .icon-orb {
-  width: 62px;
-  height: 62px;
+  width: clamp(48px, 14vw, 62px);
+  height: clamp(48px, 14vw, 62px);
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -217,6 +218,7 @@
 .scroll-screen {
   height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 22px 18px 88px;
   scroll-snap-type: y proximity;
   scroll-behavior: smooth;
@@ -248,7 +250,8 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 12px;
-  font-size: 19px;
+  font-size: clamp(16px, 4.5vw, 19px);
+  flex-wrap: wrap;
 }
 
 .glass-card {
@@ -345,7 +348,7 @@
 }
 
 .skill-card {
-  min-width: 166px;
+  min-width: clamp(140px, 44vw, 166px);
   padding: 15px;
   flex-shrink: 0;
   scroll-snap-align: start;
@@ -402,7 +405,7 @@
 }
 
 .project-card {
-  min-width: 246px;
+  min-width: clamp(220px, 68vw, 246px);
   flex-shrink: 0;
   scroll-snap-align: start;
 }

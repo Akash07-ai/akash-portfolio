@@ -35,8 +35,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  overflow: hidden;
+  min-height: 100dvh;
+  overflow-x: hidden;
 }
 
 button,
@@ -107,6 +107,7 @@ a {
   flex-direction: column;
   padding-top: 32px;
   min-height: 0;
+  min-width: 0;
 }
 
 .system-notification {
